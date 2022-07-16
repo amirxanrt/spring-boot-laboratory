@@ -4,6 +4,7 @@ import com.example.springboot.manager.UserManager;
 import com.example.springboot.security.Authentication;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.id.AbstractUUIDGenerator;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
@@ -21,12 +22,6 @@ import java.util.Objects;
 public class AuthFilter extends HttpFilter {
     private final UserManager userManager;
 
-
-    // TODO: replace with db
-    private final Map<String, String> users = Map.of(
-            "vasya", "secret",
-            "petya", "secret"
-    );
 
     // log - logger
     @Override
@@ -64,17 +59,17 @@ public class AuthFilter extends HttpFilter {
             res.getWriter().write("Not authenticated");
             return; // чтобы не попало в chain.doFilter
         }
-
-        // NPE - NullPointerException
-        if (!Objects.equals(users.get(login), password)) {
+        try {
+            Authentication authentication = userManager.authenticateByLoginPassword(
+                    login,
+                    password
+            );
+            req.setAttribute("authentication", authentication);
+        } catch (RuntimeException e){
             res.setStatus(401);
             res.getWriter().write("Not authenticated");
-            return; // чтобы не попало в chain.doFilter
+            return;
         }
-
-        // TODO: request достаточно часто используют для передачи через атрибуты доп.значений (например, аутентификации)
-        final Authentication authentication = new Authentication(login);
-        req.setAttribute("authentication", authentication);
 
         chain.doFilter(req, res);
     }

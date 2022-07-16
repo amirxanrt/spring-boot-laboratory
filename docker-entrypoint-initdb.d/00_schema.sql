@@ -10,3 +10,8 @@ CREATE TABLE posts(
     content TEXT NOT NULL,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE user_roles (
+    user_id BIGINT NOT NULL REFERENCES users,
+    role TEXT NOT NULL
+);
