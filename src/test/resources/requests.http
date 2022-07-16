@@ -17,7 +17,8 @@ Content-Type: application/json
 {
   "id": 0,
   "login": "vanya",
-  "password": "secret"
+  "password": "secret",
+  "roles": ["ROLE_USER"]
 }
 
 ### users.update
@@ -29,7 +30,9 @@ Content-Type: application/json
 {
   "id": 3,
   "login": "vanya",
-  "password": "top-secret"
+  "password": "top-secret",
+  "roles": ["ROLE_USER", "ROLE_ADMIN"]
+
 }
 
 ### users.deleteById

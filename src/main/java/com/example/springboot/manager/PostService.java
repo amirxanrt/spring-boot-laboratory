@@ -25,11 +25,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final NamedParameterJdbcOperations jdbcOperations;
-
-    private final RowMapper<PostResponseDTO> rowMapper = (rs, rowNum) ->
-            new PostResponseDTO(rs.getLong("id"), rs.getString("name"),rs.getString("content"));
 
     private final Function<PostEntity, PostResponseDTO> postEntityToPostResponseDTO= postEntity -> new PostResponseDTO(postEntity.getId(), postEntity.getName(), postEntity.getContent());
     public List<PostResponseDTO> getAll() {
@@ -48,15 +43,16 @@ public class PostService {
 
     public PostResponseDTO create(final PostRequestDTO requestDTO) {
         final PostEntity postEntity = new PostEntity();
-
-
         final PostEntity savedEntity = postRepository.save(postEntity);
         return postEntityToPostResponseDTO.apply(savedEntity);
 
     }
 
     public PostResponseDTO update(final PostRequestDTO requestDTO) {
-        PostEntity postEntity = postRepository.getReferenceById((requestDTO.getId()));
+        final PostEntity postEntity = postRepository.getReferenceById((requestDTO.getId()));
+        postEntity.setName(requestDTO.getName());
+        postEntity.setContent(requestDTO.getContent());
+        //postEntity.setTags(requestDTO.getTags());
         return postEntityToPostResponseDTO.apply((postEntity));
     }
 

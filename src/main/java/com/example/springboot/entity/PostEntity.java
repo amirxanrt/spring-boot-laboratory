@@ -14,6 +14,10 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class PostEntity {
+    @Embedded
+    private Geo geo;
+
+
 
     @Id
     @GeneratedValue(strategy =  GenerationType.IDENTITY)
@@ -29,6 +33,8 @@ public class PostEntity {
 
     @Column(nullable = false,columnDefinition = "TEXT")
     private String content;
+
+
 
 
 }

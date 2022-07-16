@@ -28,8 +28,9 @@ public class UserManager {
 
     private final Function<UserEntity, UserResponseDTO> userEntityToUserResponseDTO = userEntity -> new UserResponseDTO(
             userEntity.getId(),
-            userEntity.getLogin())
-            userEntity.getRoles());
+            userEntity.getLogin(),
+            userEntity.getRoles()
+                    );
 
     public List<UserResponseDTO> getAll(final Authentication authentication) {
         if(!authentication.hasRole(Roles.ROLE_ADMIN)){
@@ -44,7 +45,7 @@ public class UserManager {
 
     public UserResponseDTO getById(final long id,Authentication authentication) {
         if(!authentication.hasRole(Roles.ROLE_ADMIN)){
-            throw new ForbiddenException();
+            throw new ForbiddenException();//403
         }
         return userRepository.findById(id)
                 .map(userEntityToUserResponseDTO)
@@ -59,7 +60,8 @@ public class UserManager {
         final UserEntity userEntity = new UserEntity(0,
                 requestDTO.getLogin(),
                 passwordEncoder.encode(requestDTO.getPassword()),
-                requestDTO.getRoles());
+                requestDTO.getRoles()
+        );
 
         final UserEntity savedEntity = userRepository.save(userEntity);
         return userEntityToUserResponseDTO.apply(savedEntity);
@@ -67,14 +69,17 @@ public class UserManager {
     }
 
     public UserResponseDTO update(final UserRequestDTO requestDTO,Authentication authentication) {
-        UserEntity userEntity = userRepository.getReferenceById((requestDTO.getId()));
+        if (!authentication.hasRole(Roles.ROLE_ADMIN)){
+
+        }
+        final UserEntity userEntity = userRepository.getReferenceById((requestDTO.getId()));
         userEntity.setLogin((requestDTO.getLogin()));
         userEntity.setPassword(passwordEncoder.encode((requestDTO.getPassword())));
         userEntity.setRoles(requestDTO.getRoles());
         return userEntityToUserResponseDTO.apply((userEntity));
     }
 
-    public void deleteById(final long id,Authentication authentication) {
+    public void deleteById(final long id, Authentication authentication) {
         if(!authentication.hasRole(Roles.ROLE_ADMIN)){
             throw new ForbiddenException();
         }
@@ -84,7 +89,8 @@ public class UserManager {
             final String login,
             final  String password
     ) {
-       final UserEntity userEntity = userRepository.findByLogin(login).orElseThrow(UserLoginNotFoundException::new);
+       final UserEntity userEntity = userRepository.findByLogin(login)
+               .orElseThrow(UserLoginNotFoundException::new);
         if (!passwordEncoder.matches(password,userEntity.getPassword())) {
             throw  new UserPasswordNotMatchesException();
         }

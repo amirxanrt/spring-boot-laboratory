@@ -24,9 +24,10 @@ public class UserEntity {
     private String login;
     @Column(nullable = false,columnDefinition = "TEXT")
     private String password;
-   @ElementCollection
+
+    @ElementCollection
    @CollectionTable (name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
-   @Column(nullable = false, columnDefinition = "TEXT")
+   @Column(name = "role", nullable = false, columnDefinition = "TEXT")
    private List<String> roles;
 
 }
