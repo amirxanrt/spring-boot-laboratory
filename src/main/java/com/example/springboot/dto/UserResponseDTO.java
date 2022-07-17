@@ -11,4 +11,6 @@ public class UserResponseDTO {
     private long id;
     private String login;
     private List<String> roles;
+
+
 }

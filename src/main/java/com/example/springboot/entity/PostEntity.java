@@ -1,40 +1,40 @@
 package com.example.springboot.entity;
 
 
+import com.example.springboot.dto.GeoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity // требование Entity
+@Table(name = "posts") // только для удобства
+@NoArgsConstructor // требование Entity
+@AllArgsConstructor // только для удобства
 @Getter
 @Setter
 public class PostEntity {
-    @Embedded
-    private Geo geo;
-
-
-
-    @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @Id // требование Entity
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // только для удобства
     private long id;
 
-    @Column(unique = true, nullable = false, columnDefinition = "TEXT")
-    private String login;
-    @Column(nullable = false,columnDefinition = "TEXT")
-    private String password;
+    @JoinColumn(name = "author_id")
+    @ManyToOne(optional = false)
+    private UserEntity author;
 
-    @Column(unique = true, nullable = false, columnDefinition = "TEXT")
-    private String name;
-
-    @Column(nullable = false,columnDefinition = "TEXT")
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
-
-
-
-
+    @ElementCollection
+    @CollectionTable(name = "post_tags", joinColumns = @JoinColumn(name = "post_id"))
+    @Column(name = "tag", nullable = false, columnDefinition = "TEXT")
+    private List<String> tags;
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="lat", column=@Column(name = "geo_lat")),
+            @AttributeOverride(name="lng", column=@Column(name = "geo_lng")),
+    })
+    private GeoEmbeddable geo;
 }

@@ -1,51 +1,61 @@
 package com.example.springboot.controller;
-
-
 import com.example.springboot.dto.PostRequestDTO;
 import com.example.springboot.dto.PostResponseDTO;
-import com.example.springboot.dto.UserRequestDTO;
-import com.example.springboot.dto.UserResponseDTO;
-import com.example.springboot.manager.PostService;
+import com.example.springboot.manager.PostManager;
+import com.example.springboot.security.Authentication;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
+@RequiredArgsConstructor // генерирует конструктор только для final non-static полей
 public class PostController {
-    private final PostService service;
+    private final PostManager manager;
 
-    @GetMapping("/post")
-    public List<PostResponseDTO> getAll() {
-        final List<PostResponseDTO> responseDTO = service.getAll();
+    @GetMapping("/posts")
+    public List<PostResponseDTO> getAll(
+            @RequestAttribute final Authentication authentication
+    ) {
+        final List<PostResponseDTO> responseDTO = manager.getAll(authentication);
         return responseDTO;
     }
 
-    // TODO: http://localhost:8080/post/1
-    @GetMapping("/post/{id}")
-    public PostResponseDTO getById(@PathVariable final long id) {
-        final PostResponseDTO responseDTO = service.getById(id);
+    // TODO: http://localhost:8080/posts/1
+    @GetMapping("/posts/{id}")
+    public PostResponseDTO getById(
+            @RequestAttribute final Authentication authentication,
+            @PathVariable final long id
+    ) {
+        final PostResponseDTO responseDTO = manager.getById(authentication, id);
         return responseDTO;
     }
 
-    @PostMapping("/post")
-    public PostResponseDTO create(@RequestBody final PostRequestDTO requestDTO) {
-        final PostResponseDTO responseDTO = service.create(requestDTO);
+    @PostMapping("/posts")
+    public PostResponseDTO create(
+            @RequestAttribute final Authentication authentication,
+            @RequestBody final PostRequestDTO requestDTO
+    ) {
+        final PostResponseDTO responseDTO = manager.create(authentication, requestDTO);
         return responseDTO;
     }
 
-    @PutMapping("/post")
-    public PostResponseDTO update(@RequestBody final PostRequestDTO requestDTO) {
-        final PostResponseDTO responseDTO = service.update(requestDTO);
+    @PutMapping("/posts")
+    public PostResponseDTO update(
+            @RequestAttribute final Authentication authentication,
+            @RequestBody final PostRequestDTO requestDTO
+    ) {
+        final PostResponseDTO responseDTO = manager.update(authentication, requestDTO);
         return responseDTO;
     }
 
-    @DeleteMapping("/post/{id}")
-    public void deleteById(@PathVariable final long id) {
-        service.deleteById(id);
+    @DeleteMapping("/posts/{id}")
+    public void deleteById(
+            @RequestAttribute final Authentication authentication,
+            @PathVariable final long id
+    ) {
+        manager.deleteById(authentication, id);
     }
 }
-
 
 

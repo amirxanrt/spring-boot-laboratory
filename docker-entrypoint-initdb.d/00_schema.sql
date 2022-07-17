@@ -6,9 +6,16 @@ CREATE TABLE users(
 );
 CREATE TABLE posts(
     id BIGSERIAL PRIMARY KEY,
-    name TEXT NOT NULL UNIQUE,
-    content TEXT NOT NULL,
+    author_id BIGINT NOT NULL REFERENCES users,
+    content TEXT,
+    geo_lat FLOAT,
+    geo_lng FLOAT,
     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE  post_tags (
+    post_id BIGINT NOT NULL  REFERENCES  posts,
+    tag TEXT NOT NULL
 );
 
 CREATE TABLE user_roles (
