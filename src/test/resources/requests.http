@@ -16,7 +16,7 @@ Content-Type: application/json
 
 {
   "id": 0,
-  "login": "vanya",
+  "login": "vamnr",
   "password": "password",
   "roles": ["ROLE_USER"]
 }
@@ -58,7 +58,7 @@ Content-Type: application/json
 {
   "id": 0,
   "content": "Demo Post",
-  "tags": ["demo", "fun"],
+  "tags": ["#demo", "#fun"],
   "geo": {
     "lat": 55.00,
     "lng": 45.00

@@ -14,6 +14,6 @@ public class Authentication {
     private final List<String> roles;
 
     public boolean hasRole(final String role){
-        return this.roles.equals(role);
+        return this.roles.contains(role);
     }
 }

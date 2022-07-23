@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -53,7 +54,7 @@ public class UserManager {
         ;
     }
 
-    public UserResponseDTO create(final UserRequestDTO requestDTO, Authentication authentication) {
+    public UserResponseDTO create(final Authentication authentication,final UserRequestDTO requestDTO ) {
         if(!authentication.hasRole(Roles.ROLE_ADMIN)){
             throw new ForbiddenException();
         }
@@ -96,7 +97,7 @@ public class UserManager {
         }
         final Authentication authentication = Authentication.builder()
                 .id(userEntity.getId())
-                .roles(userEntity.getRoles())
+                .roles(new ArrayList<>(userEntity.getRoles()))
                 .build();
 
                 return authentication;
