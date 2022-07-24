@@ -20,16 +20,21 @@ public class UserController {
     private final UserManager manager;
 
     @GetMapping("/users")
-    public List<UserResponseDTO> getAll(@RequestAttribute final Authentication authentication) {
+    public List<UserResponseDTO> getAll(
+            @RequestAttribute final Authentication authentication
+    ) {
         final List<UserResponseDTO> responseDTO = manager.getAll(authentication);
         return responseDTO;
     }
 
     // TODO: http://localhost:8080/users/1
+    // ConstraintViolationException
     @GetMapping("/users/{id}")
-    public UserResponseDTO getById(@RequestAttribute final Authentication authentication,
-                                   @Min(1) @PathVariable final long id) {
-        final UserResponseDTO responseDTO = manager.getById(id,authentication);
+    public UserResponseDTO getById(
+            @RequestAttribute final Authentication authentication,
+            @Min(1) @PathVariable final long id
+    ) {
+        final UserResponseDTO responseDTO = manager.getById(authentication, id);
         return responseDTO;
     }
 
@@ -43,16 +48,19 @@ public class UserController {
     }
 
     @PutMapping("/users")
-    public UserResponseDTO update(@RequestAttribute final Authentication authentication,
-            @Valid @RequestBody final UserRequestDTO requestDTO) {
-        final UserResponseDTO responseDTO = manager.update(requestDTO, authentication);
+    public UserResponseDTO update(
+            @RequestAttribute final Authentication authentication,
+            @Valid @RequestBody final UserRequestDTO requestDTO
+    ) {
+        final UserResponseDTO responseDTO = manager.update(authentication, requestDTO);
         return responseDTO;
     }
 
     @DeleteMapping("/users/{id}")
     public void deleteById(
             @RequestAttribute final Authentication authentication,
-           @Min(1) @PathVariable final long id) {
-        manager.deleteById(id,authentication );
+            @Min(1) @PathVariable final long id
+    ) {
+        manager.deleteById(authentication, id);
     }
 }

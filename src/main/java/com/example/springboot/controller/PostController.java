@@ -17,6 +17,7 @@ import java.util.List;
 public class PostController {
     private final PostManager manager;
 
+
     @GetMapping("/posts")
     public List<PostResponseDTO> getAll(
             @RequestAttribute final Authentication authentication

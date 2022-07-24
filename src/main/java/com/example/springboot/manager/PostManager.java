@@ -33,10 +33,14 @@ public class PostManager {
     private final Function<PostEntity, PostResponseDTO> postEntityToPostResponseDTO = postEntity -> new PostResponseDTO(
             postEntity.getId(),
             new AuthorDTO(postEntity.getAuthor().getId(), postEntity.getAuthor().getLogin()),
+            // Optional.of(postEntity.getAuthor()).map(o -> new AuthorDTO(o.getId(), o.getLogin())).get(),
             postEntity.getContent(),
             postEntity.getTags(),
-            // postEntity.getGeo() != null ? new Geo(postEntity.getGeo().не большие измененияgetLat(), postEntity.getGeo().getLng()),
-            Optional.ofNullable(postEntity.getGeo()).map(o -> new GeoDTO(o.getLat(), o.getLng())).orElse(null)
+            // postEntity.getGeo() != null ? new GeoDTO(postEntity.getGeo().getLat(), postEntity.getGeo().getLng()) : null
+            // List.of, Map.of, Optional.of - очень не любят null
+            Optional.ofNullable(postEntity.getGeo())
+                    .map(o -> new GeoDTO(o.getLat(), o.getLng()))
+                    .orElse(null)
     );
 
     public List<PostResponseDTO> getAll(final Authentication authentication) {
@@ -55,33 +59,36 @@ public class PostManager {
     }
 
     public PostResponseDTO create(final Authentication authentication, final PostRequestDTO requestDTO) {
-        UserEntity userEntity = userRepository.getReferenceById(authentication.getId());
+        final UserEntity userEntity = userRepository.getReferenceById(authentication.getId());
+
         final PostEntity postEntity = new PostEntity(
                 0,
                 userEntity,
                 requestDTO.getContent(),
                 requestDTO.getTags(),
-                Optional.ofNullable(requestDTO.getGeo()).map(o -> new GeoEmbeddable(o.getLat(), o.getLng())).orElse(null)
+                Optional.ofNullable(requestDTO.getGeo())
+                        .map(o -> new GeoEmbeddable(o.getLat(), o.getLng()))
+                        .orElse(null)
         );
         final PostEntity savedEntity = postRepository.save(postEntity);
         return postEntityToPostResponseDTO.apply(savedEntity);
     }
 
     public PostResponseDTO update(final Authentication authentication, final PostRequestDTO requestDTO) {
-
-
+        // TODO: проверять, что пользователь обновляет именно свою запись
         final PostEntity postEntity = postRepository.getReferenceById(requestDTO.getId());
         postEntity.setContent(requestDTO.getContent());
         postEntity.setTags(requestDTO.getTags());
         postEntity.setGeo(
-                Optional.ofNullable(requestDTO.getGeo()).
-                        map(o -> new GeoEmbeddable(o.getLat(),
-                                o.getLng())).orElse(null)
+                Optional.ofNullable(requestDTO.getGeo())
+                        .map(o -> new GeoEmbeddable(o.getLat(), o.getLng()))
+                        .orElse(null)
         );
         return postEntityToPostResponseDTO.apply(postEntity);
     }
 
     public void deleteById(final Authentication authentication, final long id) {
+        // TODO: проверять, что пользователь обновляет именно свою запись
         postRepository.deleteById(id);
     }
 }
