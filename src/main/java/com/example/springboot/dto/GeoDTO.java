@@ -13,8 +13,8 @@ import javax.validation.constraints.Size;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
 @Getter
+@Setter
 public class GeoDTO {
     @Min(-90)
     @Max(90)

@@ -24,9 +24,8 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class UserManager {
-    private final UserRepository userRepository;
+    private final UserRepository userRepository; // мне через DI подставят нужный интерфейс
     private final PasswordEncoder passwordEncoder;
-
     private final Function<UserEntity, UserResponseDTO> userEntityToUserResponseDTO = userEntity -> new UserResponseDTO(
             userEntity.getId(),
             userEntity.getLogin(),

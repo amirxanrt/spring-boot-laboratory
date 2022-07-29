@@ -1,6 +1,7 @@
 package com.example.springboot.entity;
 
-
+    // posts.getGeo().getLat()
+    // posts.getGeo().getLng()
 import com.example.springboot.dto.GeoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

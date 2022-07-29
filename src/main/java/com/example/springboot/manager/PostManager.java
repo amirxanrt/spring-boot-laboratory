@@ -26,10 +26,9 @@ import java.util.stream.Collectors;
 @Transactional
 @RequiredArgsConstructor
 public class PostManager {
-
-    private final PostRepository postRepository;
+    private final PostRepository postRepository; // мне через DI подставят нужный интерфейс
     private final UserRepository userRepository;
-    // мне через DI подставят нужный интерфейс
+
     private final Function<PostEntity, PostResponseDTO> postEntityToPostResponseDTO = postEntity -> new PostResponseDTO(
             postEntity.getId(),
             new AuthorDTO(postEntity.getAuthor().getId(), postEntity.getAuthor().getLogin()),

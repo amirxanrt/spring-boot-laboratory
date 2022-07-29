@@ -12,11 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 @Data
 public class UserRequestDTO {
+    // MethodArgumentNotValidException
     @Min(0)
     private long id;
-    @NotNull
-    @Pattern(regexp = "[A-Za-z0-9]{3,20}")
-    @Size(min = 3, max = 100)
+    @NotNull // не lombok! не javax.validation/jakarta.validation
+    // Фридл - регулярные выражения
+    @Pattern(regexp = "[A-Za-z0-9]{3,100}")
     private String login;
     @NotNull
     @Size(min = 8, max = 64)
@@ -24,5 +25,4 @@ public class UserRequestDTO {
     @NotNull
     @Size(min = 1, max = 100)
     private List<@NotNull @Pattern(regexp = "ROLE_[A-Z]{1,100}") String> roles;
-
 }
