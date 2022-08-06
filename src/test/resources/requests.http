@@ -171,3 +171,13 @@ Content-Type: application/json
 DELETE http://localhost:8080/posts/2
 X-Login: vasya
 X-Password: password
+
+
+### auth.auth
+POST http://localhost:8080/auth
+Content-Type: application/json
+
+{
+  "login": "vasya",
+  "password": "password"
+}

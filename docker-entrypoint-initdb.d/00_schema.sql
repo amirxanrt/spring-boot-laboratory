@@ -22,3 +22,8 @@ CREATE TABLE user_roles (
     user_id BIGINT NOT NULL REFERENCES users,
     role TEXT NOT NULL
 );
+CREATE TABLE tokens (
+    token TEXT PRIMARY KEY ,
+    user_id BIGINT NOT NULL REFERENCES users,
+    created timestamptz NOT NULL  DEFAULT   CURRENT_TIMESTAMP
+)

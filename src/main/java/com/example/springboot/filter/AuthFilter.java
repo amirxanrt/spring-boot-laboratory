@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
 
-@Component
+//@Component
 @RequiredArgsConstructor
 @Slf4j
 public class AuthFilter extends HttpFilter {
